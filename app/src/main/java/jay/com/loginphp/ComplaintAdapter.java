@@ -8,8 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +45,13 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         holder.location.setText(complaint.getLocation());
         holder.created_at.setText(complaint.getCreated_at());
 
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mCtx, "del btn clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         new AsyncTask<Void,Void,Void>(){
 
             @Override
@@ -74,12 +83,15 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
         TextView email,location,image,created_at;
         ImageView imageView;
+        Button delete;
+
         public ComplaintViewHolder(View itemView) {
             super(itemView);
             email=itemView.findViewById(R.id.tvemail);
             location=itemView.findViewById(R.id.tvlocation);
             created_at=itemView.findViewById(R.id.tvcreated_at);
             imageView=itemView.findViewById(R.id.imageView);
+            delete=itemView.findViewById(R.id.button1);
         }
     }
 }

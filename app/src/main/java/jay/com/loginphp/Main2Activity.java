@@ -82,29 +82,6 @@ public class Main2Activity extends AppCompatActivity
         useremail.setText(user.get("email"));
 }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        unregisterReceiver(new CheckInternet());
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        IntentFilter filter=new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        registerReceiver(new CheckInternet(),filter);
-        isNetworkConnected();
-    }
-
-    public Boolean isNetworkConnected(){
-        ConnectivityManager cm=(ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo=cm.getActiveNetworkInfo();
-        if (networkInfo!=null && networkInfo.isConnectedOrConnecting()){
-            return true;
-        }
-        return false;
-    }
-
     private void logoutUser() {
         session.setLogin(false);
 

@@ -3,8 +3,10 @@ package jay.com.loginphp;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -164,9 +166,54 @@ public class New_Complaint extends Fragment {
         btnCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraintent = new Intent(
-                        MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraintent, 101);
+                int permissionCheckStorage = ContextCompat.checkSelfPermission(getActivity(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.CAMERA},
+                        1);
+
+                // we already asked for permisson & Permission granted, call camera intent
+                if (permissionCheckStorage == PackageManager.PERMISSION_GRANTED) {
+
+                    //do what you want
+
+                    Intent cameraintent = new Intent(
+                            MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraintent, 101);
+
+                } else {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                        builder.setMessage("You need to give permission to access storage in order to work this feature.");
+                        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("GIVE PERMISSION", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+
+                                // Show permission request popup
+                                ActivityCompat.requestPermissions(getActivity(),
+                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        100);
+                            }
+                        });
+                        builder.show();
+
+                    } //asking permission for first time
+                    else {
+                        // Show permission request popup for the first time
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                100);
+
+                    }
+                }
             }
         });
 
@@ -378,27 +425,6 @@ public class New_Complaint extends Fragment {
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
     }
 
-    private void showDialog() {
-        if (!pDialog.isShowing())
-            pDialog.show();
-    }
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
-
-
-    private void logoutUser() {
-        session.setLogin(false);
-
-        db.deleteUsers();
-
-        // Launching the login activity
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivity(intent);
-        getActivity().finish();
-    }
     @SuppressWarnings("MissingPermission")
     private void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(getContext(),
