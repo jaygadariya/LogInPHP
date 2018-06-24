@@ -79,7 +79,8 @@ public class Past_Complaint extends Fragment {
                                         complaint.getString("email"),
                                         complaint.getString("location"),
                                         complaint.getString("image"),
-                                        complaint.getString("created_at")
+                                        complaint.getString("created_at"),
+                                        complaint.getString("id")
                                 ));
                             }
                             ComplaintAdapter adapter = new ComplaintAdapter(getActivity(), complaintList);

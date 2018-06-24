@@ -59,7 +59,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
                         StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_DELETECOMPLAINT, new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
-
+                                Toast.makeText(mCtx, "DELETED", Toast.LENGTH_SHORT).show();
                             }
                         }, new Response.ErrorListener() {
                             @Override
@@ -71,10 +71,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
                             @Override
                             protected Map<String, String> getParams(){
                                 Map<String, String> params = new HashMap<String, String>();
-                                params.put("email", complaint.getEmail().toString());
-                                params.put("location", complaint.getLocation().toString());
-                                params.put("created_at", complaint.getCreated_at().toString());
-                                params.put("image", complaint.getImage().toString());
+                                params.put("id", complaint.getId().toString());
                                 return params;
                             }
                         };
@@ -91,6 +88,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         holder.email.setText(complaint.getEmail());
         holder.location.setText(complaint.getLocation());
         holder.created_at.setText(complaint.getCreated_at());
+        holder.id.setText(complaint.getId());
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +127,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
     }
 
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
-        TextView email,location,image,created_at;
+        TextView email,location,image,created_at,id;
         ImageView imageView;
         Button delete;
 
@@ -139,6 +137,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
             location=itemView.findViewById(R.id.tvlocation);
             created_at=itemView.findViewById(R.id.tvcreated_at);
             imageView=itemView.findViewById(R.id.imageView);
+            id=itemView.findViewById(R.id.tvid);
             delete=itemView.findViewById(R.id.button1);
         }
     }

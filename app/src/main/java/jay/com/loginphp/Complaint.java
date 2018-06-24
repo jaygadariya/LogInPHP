@@ -5,12 +5,14 @@ public class Complaint {
     String location;
     String image;
     String created_at;
+    String id;
 
-    public Complaint(String email, String location, String image, String created_at) {
+    public Complaint(String email, String location, String image, String created_at,String id) {
         this.email = email;
         this.location = location;
         this.image = image;
         this.created_at = created_at;
+        this.id = id;
     }
 
     public String getEmail() {
@@ -27,5 +29,9 @@ public class Complaint {
 
     public String getCreated_at() {
         return created_at;
+    }
+
+    public String getId() {
+        return id;
     }
 }
