@@ -85,11 +85,13 @@ public class Past_Complaint extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        pDialog.dismiss();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(getActivity(), ""+error.getMessage(), Toast.LENGTH_LONG).show();
+                        pDialog.dismiss();
                     }
                 }){
                     @Override
@@ -105,5 +107,9 @@ public class Past_Complaint extends Fragment {
                 };
 
                 Volley.newRequestQueue(getActivity()).add(stringRequest);
+                pDialog=new ProgressDialog(getActivity());
+                pDialog.setMessage("Fetching Your all Complaints...");
+                pDialog.setCancelable(false);
+                pDialog.show();
             }
         };
