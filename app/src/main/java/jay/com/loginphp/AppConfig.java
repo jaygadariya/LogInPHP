@@ -18,6 +18,6 @@ public class AppConfig {
 
     public static String URL_GETCOMPLAINT = "https://jaywebsite.000webhostapp.com/android_login_api/getcomplaint1.php";
 
-    public static String URL_DELETECOMPLAINT = "https://jaywebsite.000webhostapp.com/android_login_api/deletecomplaint1.php";
+    public static String URL_DELETECOMPLAINT = "https://jaywebsite.000webhostapp.com/android_login_api/deletecomplaint2.php";
 
 }

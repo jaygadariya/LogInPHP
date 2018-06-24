@@ -1,6 +1,8 @@
 package jay.com.loginphp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,11 +15,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.ComplaintViewHolder> {
 
@@ -41,6 +51,43 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
     public void onBindViewHolder(final ComplaintViewHolder holder, int position) {
         final Complaint complaint=complaintList.get(position);
 
+        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_DELETECOMPLAINT, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(mCtx,
+                                        error.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams(){
+                                Map<String, String> params = new HashMap<String, String>();
+                                params.put("email", complaint.getEmail().toString());
+                                params.put("location", complaint.getLocation().toString());
+                                params.put("created_at", complaint.getCreated_at().toString());
+                                params.put("image", complaint.getImage().toString());
+                                return params;
+                            }
+                        };
+                        AppController.getInstance().addToRequestQueue(strReq);
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+
+                        break;
+                }
+            }
+        };
+
         holder.email.setText(complaint.getEmail());
         holder.location.setText(complaint.getLocation());
         holder.created_at.setText(complaint.getCreated_at());
@@ -48,7 +95,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mCtx, "del btn clicked", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder=new AlertDialog.Builder(mCtx);
+                builder.setMessage("Are you Sure to want to delete this?").setPositiveButton("Yes",dialogClickListener).setNegativeButton("No",dialogClickListener).show();
             }
         });
 
