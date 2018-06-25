@@ -435,12 +435,10 @@ public class New_Complaint extends Fragment {
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             LocationRequest locationRequest = new LocationRequest();
-            locationRequest.setInterval(20);
-            locationRequest.setFastestInterval(10);
+            locationRequest.setInterval(2000);
+            locationRequest.setFastestInterval(100);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            fusedLocationClient.requestLocationUpdates(locationRequest,
-                    locationCallback,
-                    null);
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
         }
     }
 
@@ -448,16 +446,14 @@ public class New_Complaint extends Fragment {
     void getAddress() {
 
         if (!Geocoder.isPresent()) {
-            Toast.makeText(getActivity(),
-                    "Can't find current address, ",
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(),"Can't find current address, ", Toast.LENGTH_SHORT).show();
             return;
         }
-
-        Intent intent = new Intent(getActivity(), GetAddressIntentService.class);
-        intent.putExtra("add_receiver", addressResultReceiver);
-        intent.putExtra("add_location", currentLocation);
-        getActivity().startService(intent);
+            Intent intent = new Intent(getActivity(), GetAddressIntentService.class);
+            intent.putExtra("add_receiver", addressResultReceiver);
+            intent.putExtra("add_location", currentLocation);
+            getActivity().startService(intent);
+        
     }
 
     @Override
@@ -487,10 +483,6 @@ public class New_Complaint extends Fragment {
         protected void onReceiveResult(int resultCode, Bundle resultData) {
 
             if (resultCode == 0) {
-                //Last Location can be null for various reasons
-                //for example the api is called first time
-                //so retry till location is set
-                //since intent service runs on background thread, it doesn't block main thread
                 Log.d("Address", "Location null retrying");
                 getAddress();
             }
