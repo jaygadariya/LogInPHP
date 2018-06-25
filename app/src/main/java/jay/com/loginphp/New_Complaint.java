@@ -15,12 +15,14 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -174,9 +176,7 @@ public class New_Complaint extends Fragment {
 
                 // we already asked for permisson & Permission granted, call camera intent
                 if (permissionCheckStorage == PackageManager.PERMISSION_GRANTED) {
-
-                    //do what you want
-
+                    //do what you wan
                     Intent cameraintent = new Intent(
                             MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraintent, 101);
@@ -200,7 +200,7 @@ public class New_Complaint extends Fragment {
                                 // Show permission request popup
                                 ActivityCompat.requestPermissions(getActivity(),
                                         new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        100);
+                                        500);
                             }
                         });
                         builder.show();
@@ -426,7 +426,7 @@ public class New_Complaint extends Fragment {
     }
 
     @SuppressWarnings("MissingPermission")
-    private void startLocationUpdates() {
+    void startLocationUpdates() {
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -435,10 +435,9 @@ public class New_Complaint extends Fragment {
                     LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             LocationRequest locationRequest = new LocationRequest();
-            locationRequest.setInterval(2000);
-            locationRequest.setFastestInterval(1000);
+            locationRequest.setInterval(20);
+            locationRequest.setFastestInterval(10);
             locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
             fusedLocationClient.requestLocationUpdates(locationRequest,
                     locationCallback,
                     null);
@@ -446,7 +445,7 @@ public class New_Complaint extends Fragment {
     }
 
     @SuppressWarnings("MissingPermission")
-    private void getAddress() {
+    void getAddress() {
 
         if (!Geocoder.isPresent()) {
             Toast.makeText(getActivity(),
@@ -479,7 +478,7 @@ public class New_Complaint extends Fragment {
 
         }
     }
-    private class LocationAddressResultReceiver extends ResultReceiver {
+    class LocationAddressResultReceiver extends ResultReceiver {
         LocationAddressResultReceiver(Handler handler) {
             super(handler);
         }
@@ -503,13 +502,12 @@ public class New_Complaint extends Fragment {
             }
 
             String currentAdd = resultData.getString("address_result");
-
-            showResults(currentAdd);
+                showResults(currentAdd);
         }
     }
 
     private void showResults(String currentAdd){
-        currentAddTv.setText(currentAdd);
+            currentAddTv.setText(currentAdd);
     }
 
 

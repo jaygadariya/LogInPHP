@@ -3,6 +3,7 @@ package jay.com.loginphp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -60,6 +61,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
                             @Override
                             public void onResponse(String response) {
                                 Toast.makeText(mCtx, "DELETED", Toast.LENGTH_SHORT).show();
+
                             }
                         }, new Response.ErrorListener() {
                             @Override

@@ -2,11 +2,15 @@ package jay.com.loginphp;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -69,10 +73,16 @@ public class Past_Complaint extends Fragment {
 
             private void loadComplaints() {
                 StringRequest stringRequest=new StringRequest(Request.Method.POST, AppConfig.URL_GETCOMPLAINT, new Response.Listener<String>() {
+                    @SuppressLint("ResourceType")
                     @Override
                     public void onResponse(String response) {
                         try {
                             JSONArray array = new JSONArray(response);
+                            if (array.length()==0){
+                                Toast.makeText(getActivity(), "No Complaint", Toast.LENGTH_SHORT).show();
+                                int img=R.drawable.ic_delete_black_24dp;
+                                recyclerView.setBackground(getResources().getDrawable(img));
+                            }
                             for (int i = 0; i < array.length(); i++) {
                                 JSONObject complaint = array.getJSONObject(i);
                                 complaintList.add(new Complaint(
