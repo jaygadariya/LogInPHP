@@ -8,9 +8,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.preference.SwitchPreference;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,6 +49,7 @@ public class Past_Complaint extends Fragment {
     private ProgressDialog pDialog;
     List<Complaint> complaintList;
     RecyclerView recyclerView;
+
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
@@ -125,4 +128,4 @@ public class Past_Complaint extends Fragment {
                 pDialog.setCancelable(false);
                 pDialog.show();
             }
-        };
+};

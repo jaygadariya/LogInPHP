@@ -373,17 +373,7 @@ public class New_Complaint extends Fragment {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
-                        // User successfully stored in MySQL
-                        // Now store the user in sqlite
-                        String uid = jObj.getString("uid");
-
-                        Toast.makeText(getContext(), "User successfully registered. Try login now!", Toast.LENGTH_LONG).show();
-                        // Launch login activity
-                        Intent intent = new Intent(
-                                getActivity(),
-                                LoginActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        Toast.makeText(getActivity(), "Complaint Posted Successfully", Toast.LENGTH_SHORT).show();
                     } else {
 
                         // Error occurred in registration. Get the error
@@ -423,6 +413,7 @@ public class New_Complaint extends Fragment {
 
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
+        ivImage.setImageBitmap(null);
     }
 
     @SuppressWarnings("MissingPermission")

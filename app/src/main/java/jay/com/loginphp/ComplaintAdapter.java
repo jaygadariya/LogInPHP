@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -35,13 +37,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.Inflater;
 
+import static android.support.v4.content.ContextCompat.createDeviceProtectedStorageContext;
+import static android.support.v4.content.ContextCompat.startActivities;
 import static android.support.v4.content.ContextCompat.startActivity;
+import static java.security.AccessController.getContext;
 
-public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.ComplaintViewHolder> {
+public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.ComplaintViewHolder>{
 
     private Context mCtx;
     private List<Complaint> complaintList=new ArrayList<Complaint>();
     private Bitmap bmp;
+    DialogInterface.OnClickListener dialogClickListener;
+    AppCompatActivity activity;
+
 
 
     public ComplaintAdapter(Context mCtx, List<Complaint> complaintList) {
@@ -57,54 +65,8 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
     }
 
     @Override
-    public void onBindViewHolder(final ComplaintViewHolder holder, int position) {
+    public void onBindViewHolder(final ComplaintViewHolder holder, final int position) {
         final Complaint complaint=complaintList.get(position);
-
-
-        final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which){
-                    case DialogInterface.BUTTON_POSITIVE:
-
-                        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_DELETECOMPLAINT, new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Toast.makeText(mCtx, "DELETED", Toast.LENGTH_SHORT).show();
-                                AlertDialog.Builder builder=new AlertDialog.Builder(mCtx);
-                                builder.setMessage("Deleted SuccessFully");
-                                builder.setNeutralButton("ok", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        
-                                    }
-                                });
-                                builder.show();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(mCtx,
-                                        error.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        }){
-                            @Override
-                            protected Map<String, String> getParams(){
-                                Map<String, String> params = new HashMap<String, String>();
-                                params.put("id", complaint.getId().toString());
-                                return params;
-                            }
-                        };
-                        AppController.getInstance().addToRequestQueue(strReq);
-                        break;
-
-                    case DialogInterface.BUTTON_NEGATIVE:
-
-                        break;
-
-                }
-            }
-        };
 
         holder.email.setText(complaint.getEmail());
         holder.location.setText(complaint.getLocation());
@@ -114,8 +76,41 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder=new AlertDialog.Builder(mCtx);
-                builder.setMessage("Are you Sure to want to delete this?").setPositiveButton("Yes",dialogClickListener).setNegativeButton("No",dialogClickListener).show();
+                final AlertDialog.Builder builder=new AlertDialog.Builder(mCtx);
+                builder.setMessage("Are you Sure to want to delete this?").setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_DELETECOMPLAINT, new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Toast.makeText(mCtx, "DELETED Complaint No:- "+complaint.getId(), Toast.LENGTH_SHORT).show();
+                                android.support.v4.app.FragmentTransaction ft=((AppCompatActivity) mCtx).getSupportFragmentManager().beginTransaction();
+                                ft.replace(R.id.container_main,new Past_Complaint());
+                                ft.commit();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Toast.makeText(mCtx,
+                                        "Check your Internet Connection", Toast.LENGTH_LONG).show();
+                            }
+                        }){
+                            @Override
+                            protected Map<String, String> getParams(){
+                                Map<String, String> params = new HashMap<String, String>();
+                                //params.put("id", complaint.getId().toString());
+                                params.put("id", complaint.getId());
+                                return params;
+                            }
+                        };
+                        AppController.getInstance().addToRequestQueue(strReq);
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                }).show();
             }
         });
 
@@ -140,12 +135,16 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
                 super.onPostExecute(aVoid);
             }
         }.execute();
+
     }
+
 
     @Override
     public int getItemCount() {
         return complaintList.size();
     }
+
+
 
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
         TextView email,location,image,created_at,id;
@@ -160,6 +159,40 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
             imageView=itemView.findViewById(R.id.imageView);
             id=itemView.findViewById(R.id.tvid);
             delete=itemView.findViewById(R.id.button1);
+//            delete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Toast.makeText(mCtx, "clicked", Toast.LENGTH_SHORT).show();
+//
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+//                    builder.setMessage("Are you Sure to want to delete this?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+//                }
+//
+//                    dialogClickListener = new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which){
+//                    case DialogInterface.BUTTON_POSITIVE:
+//                            deletemethod();
+//
+//                        break;
+//
+//                    case DialogInterface.BUTTON_NEGATIVE:
+//                            dialog.cancel();
+//                        break;
+//
+//                }
+//            }
+//
+//
+//
+//                    AppCompatActivity activity=(AppCompatActivity)view.getContext();
+//                    android.support.v4.app.FragmentTransaction ft=activity.getSupportFragmentManager().beginTransaction();
+//                    ft.replace(R.id.container_main,new Past_Complaint());
+//                    ft.commit();
+//
+//                }
+//            });
         }
     }
 }
