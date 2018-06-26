@@ -160,10 +160,6 @@ public class Main2Activity extends AppCompatActivity
             ft.replace(R.id.container_main,new Past_Complaint());
             ft.commit();
             //startActivity(new Intent(Main2Activity.this,cool.class));
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
