@@ -66,7 +66,7 @@ public class Past_Complaint extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_past__complaint, container, false);
 
-                recyclerView=(RecyclerView) view.findViewById(R.id.recylcerView1);
+                recyclerView=(RecyclerView) view.findViewById(R.id.recyclerView1);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 complaintList=new ArrayList<>();

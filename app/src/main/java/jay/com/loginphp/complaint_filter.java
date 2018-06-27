@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class complaint_filter extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_complaint_filter, container, false);
 
-        recyclerView=(RecyclerView) view.findViewById(R.id.recylcerView2);
+        recyclerView=(RecyclerView) view.findViewById(R.id.recyclerView2);
         spinner=(Spinner)view.findViewById(R.id.complaint_spinner);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -91,7 +92,10 @@ public class complaint_filter extends Fragment {
                     if (array.length()==0){
                         Toast.makeText(getActivity(), "No Complaint", Toast.LENGTH_SHORT).show();
                         int img=R.drawable.ic_delete_black_24dp;
-                        recyclerView.setBackground(getResources().getDrawable(img));
+                        //recyclerView.setBackground(getResources().getDrawable(img));
+                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.no, new no_complaint()).addToBackStack(null);
+                        ft.commit();
                     }
                     for (int i = 0; i < array.length(); i++) {
                         JSONObject complaint = array.getJSONObject(i);
