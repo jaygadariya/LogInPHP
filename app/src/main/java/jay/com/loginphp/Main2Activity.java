@@ -182,7 +182,11 @@ public class Main2Activity extends AppCompatActivity
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.replace(R.id.container_main, new Past_Complaint()).addToBackStack(null);
                 ft.commit();
-        } else if (id == R.id.nav_share) {
+        } else if(id == R.id.allcomplaint){
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_main, new complaint_filter()).addToBackStack(null);
+            ft.commit();
+        }else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
 
