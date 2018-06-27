@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/Past"
-    tools:context=".Past_Complaint">
+    tools:context=".Past_Complaint"
+    android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
 

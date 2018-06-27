@@ -16,6 +16,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +64,7 @@ public class Past_Complaint extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_past__complaint, container, false);
-
+        View view = inflater.inflate(R.layout.fragment_past__complaint, container, false);
 
                 recyclerView=(RecyclerView) view.findViewById(R.id.recylcerView1);
                 recyclerView.setHasFixedSize(true);
@@ -73,6 +73,7 @@ public class Past_Complaint extends Fragment {
                 loadComplaints();
                 return view;
             }
+
 
             private void loadComplaints() {
                 StringRequest stringRequest=new StringRequest(Request.Method.POST, AppConfig.URL_GETCOMPLAINT, new Response.Listener<String>() {
@@ -93,7 +94,8 @@ public class Past_Complaint extends Fragment {
                                         complaint.getString("location"),
                                         complaint.getString("image"),
                                         complaint.getString("created_at"),
-                                        complaint.getString("id")
+                                        complaint.getString("id"),
+                                        complaint.getString("problem")
                                 ));
                             }
                             ComplaintAdapter adapter = new ComplaintAdapter(getActivity(), complaintList);
@@ -128,4 +130,5 @@ public class Past_Complaint extends Fragment {
                 pDialog.setCancelable(false);
                 pDialog.show();
             }
+
 };

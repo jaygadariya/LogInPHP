@@ -3,30 +3,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/newcomplaint"
-    tools:context=".New_Complaint">
+    tools:context=".New_Complaint"
+    android:background="@color/white">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:id="@+id/bottom">
+        <Button
+            android:id="@+id/btn_complaint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Complaint"/>
+    </LinearLayout>
 
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_above="@+id/bottom">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/btnCamera"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="272dp"
+        android:layout_below="@+id/ivImage"
         android:text="Capture Image" />
 
     <TextView
         android:id="@+id/current_address"
         android:layout_width="match_parent"
         android:layout_height="223dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
+        android:layout_below="@+id/btnCamera"
         android:lines="10"
         android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
@@ -40,17 +53,15 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp" />
 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/current_address"
+            android:entries="@array/complaint_entry"
+            />
 
-    <Button
-        android:id="@+id/btn_complaint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="-5dp"
-        android:layout_marginEnd="-5dp"
-        android:layout_marginBottom="-5dp"
-        android:text="Complaint" />
-
+    </RelativeLayout>
+</ScrollView>
 
 </RelativeLayout>

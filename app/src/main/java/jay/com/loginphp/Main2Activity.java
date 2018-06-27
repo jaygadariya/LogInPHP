@@ -1,6 +1,7 @@
 package jay.com.loginphp;
 
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +28,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -41,6 +45,7 @@ public class Main2Activity extends AppCompatActivity
 
     SharedPreferences sharedpreferences;
     public static final String MyPREFERENCES = "MyPrefs" ;
+    private boolean doubleBackToExitPressedOnce;
 
 
     @Override
@@ -111,6 +116,24 @@ public class Main2Activity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        FragmentManager fm=getSupportFragmentManager();
+        if (fm.getBackStackEntryCount()>1){
+            fm.popBackStack();
+        }else {
+            if (doubleBackToExitPressedOnce){
+                fm.popBackStack();
+                super.onBackPressed();
+                return;
+            }
+            this.doubleBackToExitPressedOnce=true;
+            Toast.makeText(this, "Press Again To Exit", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce=false;
+                }
+            },3000);
+        }
     }
 
     @Override
@@ -148,18 +171,17 @@ public class Main2Activity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        ((RelativeLayout)findViewById(R.id.container_main)).removeAllViews();
         if (id == R.id.newcomplaint) {
-            FragmentManager fragmentManager=getSupportFragmentManager();
-            FragmentTransaction transaction=fragmentManager.beginTransaction();
-            New_Complaint myFragment=new New_Complaint();
-            transaction.replace(R.id.container_main,myFragment);
-            transaction.commit();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                New_Complaint myFragment = new New_Complaint();
+                transaction.replace(R.id.container_main, myFragment).addToBackStack(null);
+                transaction.commit();
         } else if (id == R.id.pastcomplaint) {
-            FragmentTransaction ft=getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.container_main,new Past_Complaint());
-            ft.commit();
-            //startActivity(new Intent(Main2Activity.this,cool.class));
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.container_main, new Past_Complaint()).addToBackStack(null);
+                ft.commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

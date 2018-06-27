@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -91,6 +92,7 @@ public class New_Complaint extends Fragment {
     private Boolean upflag = false;
     private Uri selectedImage = null;
     private Bitmap bitmap, bitmapRotate;
+    Spinner spinner;
 
     String imagepath = "";
     String fname;
@@ -116,26 +118,34 @@ public class New_Complaint extends Fragment {
         SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
         final String email=sharedPreferences.getString("email",null);
         locationtext=(TextView)view.findViewById(R.id.current_address);
+        spinner=(Spinner) view.findViewById(R.id.spinner);
+
 
         complaint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 String location=locationtext.getText().toString().trim();
+                String problem=spinner.getSelectedItem().toString();
+                if (spinner.getSelectedItemPosition()==0){
+                    Toast.makeText(getActivity(), "Choose Right Value In spinner", Toast.LENGTH_SHORT).show();
 
-                complain(email,location);
-
-                //image upload
-                if (cd.isConnectingToInternet()) {
-                    if (!upflag) {
-                        Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
-                    } else {
-                        saveFile(bitmapRotate, file);
-                    }
-                } else {
-                    Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
                 }
+                else {
+                    complain(email, location, problem);
+                    //Toast.makeText(getActivity(), ""+spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
 
+                    //image upload
+                    if (cd.isConnectingToInternet()) {
+                        if (!upflag) {
+                            Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
+                        } else {
+                            saveFile(bitmapRotate, file);
+                        }
+                    } else {
+                        Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
+                    }
+                }
 
             }
         });
@@ -360,7 +370,7 @@ public class New_Complaint extends Fragment {
         }
     }
     //complaint function
-    public void complain(final String email, final String location) {
+    public void complain(final String email, final String location,final String problem) {
         String tag_string_req = "req_complaint";
 
         StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_COMPLAINT, new Response.Listener<String>() {
@@ -405,6 +415,7 @@ public class New_Complaint extends Fragment {
                 params.put("location", location);
                 params.put("email", email);
                 params.put("fname",image);
+                params.put("problem",problem);
 
                 return params;
             }
@@ -414,6 +425,7 @@ public class New_Complaint extends Fragment {
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         ivImage.setImageBitmap(null);
+
     }
 
     @SuppressWarnings("MissingPermission")

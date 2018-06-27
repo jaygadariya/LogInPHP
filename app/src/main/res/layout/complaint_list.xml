@@ -32,6 +32,11 @@
                 android:layout_width="wrap_content"
                 android:id="@+id/tvid"
                 android:layout_below="@+id/tvcreated_at"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvproblem"
+                android:layout_below="@+id/tvid"/>
 
             <ImageView
                 android:id="@+id/imageView"

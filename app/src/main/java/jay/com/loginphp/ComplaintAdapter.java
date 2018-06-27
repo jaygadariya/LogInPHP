@@ -72,6 +72,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         holder.location.setText(complaint.getLocation());
         holder.created_at.setText(complaint.getCreated_at());
         holder.id.setText(complaint.getId());
+        holder.problem.setText(complaint.getProblem());
 
         holder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +148,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
 
 
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
-        TextView email,location,image,created_at,id;
+        TextView email,location,image,created_at,id,problem;
         ImageView imageView;
         Button delete;
 
@@ -159,40 +160,7 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
             imageView=itemView.findViewById(R.id.imageView);
             id=itemView.findViewById(R.id.tvid);
             delete=itemView.findViewById(R.id.button1);
-//            delete.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Toast.makeText(mCtx, "clicked", Toast.LENGTH_SHORT).show();
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
-//                    builder.setMessage("Are you Sure to want to delete this?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
-//                }
-//
-//                    dialogClickListener = new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                switch (which){
-//                    case DialogInterface.BUTTON_POSITIVE:
-//                            deletemethod();
-//
-//                        break;
-//
-//                    case DialogInterface.BUTTON_NEGATIVE:
-//                            dialog.cancel();
-//                        break;
-//
-//                }
-//            }
-//
-//
-//
-//                    AppCompatActivity activity=(AppCompatActivity)view.getContext();
-//                    android.support.v4.app.FragmentTransaction ft=activity.getSupportFragmentManager().beginTransaction();
-//                    ft.replace(R.id.container_main,new Past_Complaint());
-//                    ft.commit();
-//
-//                }
-//            });
+            problem=itemView.findViewById(R.id.tvproblem);
         }
     }
 }
