@@ -84,8 +84,7 @@ public class Past_Complaint extends Fragment {
                             JSONArray array = new JSONArray(response);
                             if (array.length()==0){
                                 Toast.makeText(getActivity(), "No Complaint", Toast.LENGTH_SHORT).show();
-                                int img=R.drawable.ic_delete_black_24dp;
-                                recyclerView.setBackground(getResources().getDrawable(img));
+                                recyclerView.setBackground(getResources().getDrawable(R.drawable.ic_delete_black_24dp));
                             }
                             else {
                                 for (int i = 0; i < array.length(); i++) {

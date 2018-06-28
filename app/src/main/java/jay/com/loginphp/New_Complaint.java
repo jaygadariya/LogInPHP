@@ -335,7 +335,7 @@ public class New_Complaint extends Fragment {
         protected void onPreExecute() {
 
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("wait uploading Image..");
+            pDialog.setMessage("wait While Complenting to AMC..");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -363,7 +363,7 @@ public class New_Complaint extends Fragment {
                 pDialog.dismiss();
             }
             if (upflag) {
-                Toast.makeText(getContext(), "Uploading Complete", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Complaint Posted Successfully..", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(getContext(), "Unfortunately file is not Uploaded..", Toast.LENGTH_LONG).show();
             }
@@ -378,24 +378,22 @@ public class New_Complaint extends Fragment {
             @Override
             public void onResponse(String response) {
 
-
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         Toast.makeText(getActivity(), "Complaint Posted Successfully", Toast.LENGTH_SHORT).show();
+                        pDialog.dismiss();
                     } else {
 
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
-                        Toast.makeText(getContext(),
-                                errorMsg, Toast.LENGTH_LONG).show();
+                        //Toast.makeText(getContext(),errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
 
@@ -403,8 +401,7 @@ public class New_Complaint extends Fragment {
             public void onErrorResponse(VolleyError error) {
                 //Log.e(TAG, "Registration Error: " + error.getMessage());
                 Toast.makeText(getContext(),
-                        error.getMessage(), Toast.LENGTH_LONG).show();
-
+                        "Check Your Internet Connection", Toast.LENGTH_LONG).show();
             }
         }) {
 
@@ -419,13 +416,10 @@ public class New_Complaint extends Fragment {
 
                 return params;
             }
-
         };
-
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         ivImage.setImageBitmap(null);
-
     }
 
     @SuppressWarnings("MissingPermission")

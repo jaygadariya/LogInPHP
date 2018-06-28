@@ -118,7 +118,7 @@ public class GetAddressIntentService extends IntentService {
         Bundle bundle = new Bundle();
 
         if (message.contains("null")){
-            String error="no Location";
+            String error="Wait Untill We finding Your Current Address";
             bundle.putString("address_result", error);
         }else {
             bundle.putString("address_result", message);

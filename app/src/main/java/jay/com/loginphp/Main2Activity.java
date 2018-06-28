@@ -116,24 +116,6 @@ public class Main2Activity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-        FragmentManager fm=getSupportFragmentManager();
-        if (fm.getBackStackEntryCount()>1){
-            fm.popBackStack();
-        }else {
-            if (doubleBackToExitPressedOnce){
-                fm.popBackStack();
-                super.onBackPressed();
-                return;
-            }
-            this.doubleBackToExitPressedOnce=true;
-            Toast.makeText(this, "Press Again To Exit", Toast.LENGTH_SHORT).show();
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    doubleBackToExitPressedOnce=false;
-                }
-            },3000);
-        }
     }
 
     @Override
