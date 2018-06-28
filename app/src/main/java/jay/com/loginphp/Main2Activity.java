@@ -171,7 +171,7 @@ public class Main2Activity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        ((RelativeLayout)findViewById(R.id.container_main)).removeAllViews();
+
         if (id == R.id.newcomplaint) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction transaction = fragmentManager.beginTransaction();

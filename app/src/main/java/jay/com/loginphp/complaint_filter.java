@@ -92,21 +92,24 @@ public class complaint_filter extends Fragment {
                     if (array.length()==0){
                         Toast.makeText(getActivity(), "No Complaint", Toast.LENGTH_SHORT).show();
                         int img=R.drawable.ic_delete_black_24dp;
-                        //recyclerView.setBackground(getResources().getDrawable(img));
-                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                        ft.replace(R.id.no, new no_complaint()).addToBackStack(null);
-                        ft.commit();
+                        recyclerView.setBackground(getResources().getDrawable(img));
+//                        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+//                        ft.replace(R.id.no, new no_complaint()).addToBackStack(null);
+//                        ft.commit();
                     }
-                    for (int i = 0; i < array.length(); i++) {
-                        JSONObject complaint = array.getJSONObject(i);
-                        complaintList.add(new Complaint(
-                                complaint.getString("email"),
-                                complaint.getString("location"),
-                                complaint.getString("image"),
-                                complaint.getString("created_at"),
-                                complaint.getString("id"),
-                                complaint.getString("problem")
-                        ));
+                    else {
+                        for (int i = 0; i < array.length(); i++) {
+                            JSONObject complaint = array.getJSONObject(i);
+                            complaintList.add(new Complaint(
+                                    complaint.getString("email"),
+                                    complaint.getString("location"),
+                                    complaint.getString("image"),
+                                    complaint.getString("created_at"),
+                                    complaint.getString("id"),
+                                    complaint.getString("problem")
+                            ));
+                            recyclerView.setBackground(getResources().getDrawable(R.color.white));
+                        }
                     }
                     Complaint_filter_Adapter adapter = new Complaint_filter_Adapter(getActivity(), complaintList);
                     recyclerView.setAdapter(adapter);

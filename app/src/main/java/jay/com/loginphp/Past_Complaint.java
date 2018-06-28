@@ -87,16 +87,19 @@ public class Past_Complaint extends Fragment {
                                 int img=R.drawable.ic_delete_black_24dp;
                                 recyclerView.setBackground(getResources().getDrawable(img));
                             }
-                            for (int i = 0; i < array.length(); i++) {
-                                JSONObject complaint = array.getJSONObject(i);
-                                complaintList.add(new Complaint(
-                                        complaint.getString("email"),
-                                        complaint.getString("location"),
-                                        complaint.getString("image"),
-                                        complaint.getString("created_at"),
-                                        complaint.getString("id"),
-                                        complaint.getString("problem")
-                                ));
+                            else {
+                                for (int i = 0; i < array.length(); i++) {
+                                    JSONObject complaint = array.getJSONObject(i);
+                                    complaintList.add(new Complaint(
+                                            complaint.getString("email"),
+                                            complaint.getString("location"),
+                                            complaint.getString("image"),
+                                            complaint.getString("created_at"),
+                                            complaint.getString("id"),
+                                            complaint.getString("problem")
+                                    ));
+                                    recyclerView.setBackground(getResources().getDrawable(R.color.white));
+                                }
                             }
                             ComplaintAdapter adapter = new ComplaintAdapter(getActivity(), complaintList);
                             recyclerView.setAdapter(adapter);

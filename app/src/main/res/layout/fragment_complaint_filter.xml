@@ -4,31 +4,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".complaint_filter"
-
     android:background="@color/white">
 
     <!-- TODO: Update blank fragment layout -->
-    <Spinner
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/complaint_entry"
-        android:id="@+id/complaint_spinner">
-
-    </Spinner>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/complaint_spinner"
-        android:id="@+id/no">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView2"
+        android:id="@+id/spinnerrelative">
+        <Spinner
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            tools:layout_editor_absoluteX="745dp"
-            tools:layout_editor_absoluteY="-51dp" />
-
-
+            android:layout_height="wrap_content"
+            android:entries="@array/complaint_entry"
+            android:id="@+id/complaint_spinner"
+            >
+        </Spinner>
     </RelativeLayout>
 
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/filtercomplaint"
+            android:layout_below="@+id/spinnerrelative">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:layout_editor_absoluteX="745dp"
+                tools:layout_editor_absoluteY="-51dp" />
+        </RelativeLayout>
 </RelativeLayout>
