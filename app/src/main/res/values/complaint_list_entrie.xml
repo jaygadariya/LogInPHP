@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="complaint_entry">
+        <item>Select One</item>
+        <item>Water Problem</item>
+        <item>Street Light Problem</item>
+        <item>Drainage Problem</item>
+    </string-array>
+</resources>
