@@ -43,6 +43,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -242,7 +243,12 @@ public class Main2Activity extends AppCompatActivity
             ft.replace(R.id.container_main, new complaint_filter()).addToBackStack(null);
             ft.commit();
         }else if (id == R.id.nav_share) {
-
+           ArrayList<Uri> uris=new ArrayList<Uri>();
+           Intent sendintent=new Intent(Intent.ACTION_SEND_MULTIPLE);
+           sendintent.setType("application/*");
+           uris.add(Uri.fromFile(new File(getApplicationInfo().publicSourceDir)));
+           sendintent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
+           startActivity(Intent.createChooser(sendintent,null));
         } else if (id == R.id.nav_send) {
 
         } else if(id == R.id.logout) {
