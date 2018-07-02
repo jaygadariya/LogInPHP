@@ -2,6 +2,7 @@ package jay.com.loginphp;
 
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -13,19 +14,20 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
+import android.location.Address;
+import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.ResultReceiver;
 import android.provider.MediaStore;
-import android.provider.Settings;
-import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,11 +43,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
-import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -54,8 +51,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
@@ -63,24 +63,13 @@ import java.util.Random;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class New_Complaint extends Fragment {
+public class New_Complaint extends Fragment implements LocationListener{
     TextView useremail;
 
     private SQLiteHandler db;
     private SessionManager session;
 
-
-    private FusedLocationProviderClient fusedLocationClient;
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 2;
-
-    private New_Complaint.LocationAddressResultReceiver addressResultReceiver;
-
     private TextView currentAddTv;
-
-    private Location currentLocation;
-
-    private LocationCallback locationCallback;
 
     Button complaint;
     private ProgressDialog pDialog;
@@ -99,6 +88,9 @@ public class New_Complaint extends Fragment {
     String image;
     File file;
 
+    LocationManager locationManager;
+    String provider;
+
     public static final String MyPREFERENCES = "MyPrefs" ;
 
 
@@ -106,126 +98,108 @@ public class New_Complaint extends Fragment {
         // Required empty public constructor
     }
 
-
+    @SuppressLint("MissingPermission")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_new__complaint, container, false);
 
-        complaint=(Button)view.findViewById(R.id.btn_complaint);
+            complaint = (Button) view.findViewById(R.id.btn_complaint);
 
-        SharedPreferences sharedPreferences=this.getActivity().getSharedPreferences(MyPREFERENCES,Context.MODE_PRIVATE);
-        final String email=sharedPreferences.getString("email",null);
-        locationtext=(TextView)view.findViewById(R.id.current_address);
-        spinner=(Spinner) view.findViewById(R.id.spinner);
+            SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            final String email = sharedPreferences.getString("email", null);
+            locationtext = (TextView) view.findViewById(R.id.current_address);
+            spinner = (Spinner) view.findViewById(R.id.spinner);
 
+            complaint.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        complaint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                String location=locationtext.getText().toString().trim();
-                String problem=spinner.getSelectedItem().toString();
-                if (spinner.getSelectedItemPosition()==0){
-                    Toast.makeText(getActivity(), "Choose Right Value In spinner", Toast.LENGTH_SHORT).show();
-
-                }
-                else {
-                    complain(email, location, problem);
-                    //Toast.makeText(getActivity(), ""+spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-
-                    //image upload
-                    if (cd.isConnectingToInternet()) {
-                        if (!upflag) {
-                            Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
-                        } else {
-                            saveFile(bitmapRotate, file);
-                        }
+                    String location = locationtext.getText().toString().trim();
+                    if (locationtext.getText().toString() == "") {
+                        statuscheck();
+                        Toast.makeText(getActivity(), "Wait While Getting Location", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
+                        String problem = spinner.getSelectedItem().toString();
+                        if (spinner.getSelectedItemPosition() == 0) {
+                            Toast.makeText(getActivity(), "Choose Right Value In spinner", Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            complain(email, location, problem);
+                            //Toast.makeText(getActivity(), ""+spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
+
+                            //image upload
+                            if (cd.isConnectingToInternet()) {
+                                if (!upflag) {
+                                    Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
+                                } else {
+                                    saveFile(bitmapRotate, file);
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
+                            }
+                        }
                     }
+
                 }
+            });
 
-            }
-        });
-
-//location
-        addressResultReceiver = new LocationAddressResultReceiver(new Handler());
-
-        currentAddTv = (TextView) view.findViewById(R.id.current_address);
-
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getActivity());
-
-        locationCallback = new LocationCallback() {
-            @Override
-            public void onLocationResult(LocationResult locationResult) {
-                currentLocation = locationResult.getLocations().get(0);
-                getAddress();
-            };
-        };
-        startLocationUpdates();
-//
-        cd = new ConnectionDetector(getActivity());
+            cd = new ConnectionDetector(getActivity());
 
 
-        btnCamera = (Button) view.findViewById(R.id.btnCamera);
-        ivImage = (ImageView) view.findViewById(R.id.ivImage);
+            btnCamera = (Button) view.findViewById(R.id.btnCamera);
+            ivImage = (ImageView) view.findViewById(R.id.ivImage);
 
-        cd = new ConnectionDetector(getContext());
+            cd = new ConnectionDetector(getContext());
 
-        //open camera for image upload
-        btnCamera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int permissionCheckStorage = ContextCompat.checkSelfPermission(getActivity(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE);
-                ActivityCompat.requestPermissions(getActivity(),
-                        new String[]{Manifest.permission.CAMERA},
-                        1);
-
-                // we already asked for permisson & Permission granted, call camera intent
-                if (permissionCheckStorage == PackageManager.PERMISSION_GRANTED) {
-                    //do what you wan
+            //open camera for image upload
+            btnCamera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     Intent cameraintent = new Intent(
                             MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraintent, 101);
-
-                } else {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                        builder.setMessage("You need to give permission to access storage in order to work this feature.");
-                        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        });
-                        builder.setPositiveButton("GIVE PERMISSION", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-
-                                // Show permission request popup
-                                ActivityCompat.requestPermissions(getActivity(),
-                                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                        500);
-                            }
-                        });
-                        builder.show();
-
-                    } //asking permission for first time
-                    else {
-                        // Show permission request popup for the first time
-                        ActivityCompat.requestPermissions(getActivity(),
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                100);
-
-                    }
                 }
+            });
+
+            statuscheck();
+
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+            Criteria criteria = new Criteria();
+
+            provider = locationManager.getBestProvider(criteria, false);
+
+            if (provider != null && !provider.equals("")) {
+                if (!provider.contains("gps")) { // if gps is disabled
+                    final Intent poke = new Intent();
+                    poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+                    poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+                    poke.setData(Uri.parse("3"));
+                    getActivity().sendBroadcast(poke);
+                }
+                Location location = locationManager
+                        .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER, 500, 0, this);
+                if (location != null)
+                    onLocationChanged(location);
+                else
+                    location = locationManager.getLastKnownLocation(provider);
+                if (location != null)
+                    onLocationChanged(location);
+                else
+
+                    Toast.makeText(getActivity().getBaseContext(), "Location can't be retrieved",
+                            Toast.LENGTH_SHORT).show();
+
+            } else {
+                Toast.makeText(getActivity().getBaseContext(), "No Provider Found",
+                        Toast.LENGTH_SHORT).show();
             }
-        });
+
 
         return view;
     }
@@ -329,6 +303,83 @@ public class New_Complaint extends Fragment {
         }
     }
 
+    public void statuscheck(){
+        final LocationManager manager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+
+        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            buildAlertMessageNoGps();
+        }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?").setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        startActivity(new Intent(
+                                android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog,
+                                        final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    @SuppressLint("LongLogTag")
+    @Override
+    public void onLocationChanged(Location location) {
+        Geocoder geocoder;
+        List<android.location.Address> addresses;
+        String strAdd = "";
+        geocoder=new Geocoder(getContext(), Locale.getDefault());
+
+
+        try {
+            addresses=geocoder.getFromLocation(location.getLatitude(),location.getLongitude(),1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                locationtext.setText(strAdd);
+                Log.w("My Current loction address", strReturnedAddress.toString());
+            } else {
+                Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Check Permissions Now
+            ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    0);
+        }
+    }
+
     class DoFileUpload extends AsyncTask<String, String, String> {
 
         @Override
@@ -422,93 +473,4 @@ public class New_Complaint extends Fragment {
         ivImage.setImageBitmap(null);
     }
 
-    @SuppressWarnings("MissingPermission")
-    void startLocationUpdates() {
-        if (ContextCompat.checkSelfPermission(getContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        } else {
-            LocationRequest locationRequest = new LocationRequest();
-            locationRequest.setInterval(2000);
-            locationRequest.setFastestInterval(100);
-            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null);
-        }
-    }
-
-    @SuppressWarnings("MissingPermission")
-    void getAddress() {
-
-        if (!Geocoder.isPresent()) {
-            Toast.makeText(getActivity(),"Can't find current address, ", Toast.LENGTH_SHORT).show();
-            return;
-        }
-            Intent intent = new Intent(getActivity(), GetAddressIntentService.class);
-            intent.putExtra("add_receiver", addressResultReceiver);
-            intent.putExtra("add_location", currentLocation);
-            getActivity().startService(intent);
-        
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case LOCATION_PERMISSION_REQUEST_CODE: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startLocationUpdates();
-                } else {
-                    Toast.makeText(getActivity(), "Location permission not granted, " +
-                                    "restart the app if you want the feature",
-                            Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-        }
-    }
-    class LocationAddressResultReceiver extends ResultReceiver {
-        LocationAddressResultReceiver(Handler handler) {
-            super(handler);
-        }
-
-        @Override
-        protected void onReceiveResult(int resultCode, Bundle resultData) {
-
-            if (resultCode == 0) {
-                Log.d("Address", "Location null retrying");
-                getAddress();
-            }
-
-            if (resultCode == 1) {
-                Toast.makeText(getActivity(),
-                        "Address not found, " ,
-                        Toast.LENGTH_SHORT).show();
-            }
-
-            String currentAdd = resultData.getString("address_result");
-                showResults(currentAdd);
-        }
-    }
-
-    private void showResults(String currentAdd){
-            currentAddTv.setText(currentAdd);
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        fusedLocationClient.removeLocationUpdates(locationCallback);
-    }
 }

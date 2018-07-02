@@ -2,8 +2,16 @@
 <resources>
     <string-array name="complaint_entry">
         <item>Select One</item>
-        <item>Water Problem</item>
-        <item>Street Light Problem</item>
         <item>Drainage Problem</item>
+        <item>Water Problem</item>
+        <item>Storm Water</item>
+        <item>Street Light Problem</item>
+        <item>Health</item>
+        <item>Cleaning &amp; Solid Waste</item>
+        <item>Road</item>
+        <item>Wandering &amp; Dead Animals</item>
+        <item>Garden</item>
+        <item>Tree Cutting</item>
+        <item>Traffic Circle</item>
     </string-array>
 </resources>
