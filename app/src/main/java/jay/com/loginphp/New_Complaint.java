@@ -75,8 +75,8 @@ public class New_Complaint extends Fragment implements LocationListener{
     private ProgressDialog pDialog;
     TextView locationtext;
 
-    Button btnSubmit, btnCamera;
-    private ImageView ivImage;
+    Button btnCamera,addimage;
+    private ImageView ivImage,addimageview;
     private ConnectionDetector cd;
     private Boolean upflag = false;
     private Uri selectedImage = null;
@@ -106,11 +106,22 @@ public class New_Complaint extends Fragment implements LocationListener{
         View view=inflater.inflate(R.layout.fragment_new__complaint, container, false);
 
             complaint = (Button) view.findViewById(R.id.btn_complaint);
+            btnCamera = (Button) view.findViewById(R.id.btnCamera);
+            ivImage = (ImageView) view.findViewById(R.id.ivImage);
+            addimage = (Button) view.findViewById(R.id.addimage);
+            addimageview = (ImageView) view.findViewById(R.id.addimageview);
 
             SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             final String email = sharedPreferences.getString("email", null);
             locationtext = (TextView) view.findViewById(R.id.current_address);
             spinner = (Spinner) view.findViewById(R.id.spinner);
+
+
+            if (ivImage.getDrawable()==null) {
+                addimage.setVisibility(View.GONE);
+
+                addimageview.setVisibility(View.GONE);
+            }
 
             complaint.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -147,10 +158,6 @@ public class New_Complaint extends Fragment implements LocationListener{
 
             cd = new ConnectionDetector(getActivity());
 
-
-            btnCamera = (Button) view.findViewById(R.id.btnCamera);
-            ivImage = (ImageView) view.findViewById(R.id.ivImage);
-
             cd = new ConnectionDetector(getContext());
 
             //open camera for image upload
@@ -160,10 +167,23 @@ public class New_Complaint extends Fragment implements LocationListener{
                     Intent cameraintent = new Intent(
                             MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraintent, 101);
+
+
                 }
             });
 
-            statuscheck();
+            addimage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent cameraintent = new Intent(
+                                MediaStore.ACTION_IMAGE_CAPTURE);
+                  startActivityForResult(cameraintent, 102);
+                    }
+                });
+
+
+
+        statuscheck();
 
             locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 
@@ -223,9 +243,10 @@ public class New_Complaint extends Fragment implements LocationListener{
                                 bitmapRotate = bitmap;
                                 bitmap.recycle();
                             }
-
                             ivImage.setVisibility(View.VISIBLE);
-                            ivImage.setImageBitmap(bitmapRotate);
+                                ivImage.setImageBitmap(bitmapRotate);
+
+
 
 //                            Saving image to mobile internal memory for sometime
                             String root = getContext().getFilesDir().toString();
@@ -251,6 +272,57 @@ public class New_Complaint extends Fragment implements LocationListener{
                             upflag = true;
                         }
                     }
+                    if (ivImage.getDrawable()!=null) {
+                        addimage.setVisibility(View.VISIBLE);
+                        addimageview.setVisibility(View.VISIBLE);
+                    }
+                    break;
+                case 102:
+                    if (resultCode == Activity.RESULT_OK) {
+                        if (data != null) {
+                            selectedImage = data.getData(); // the uri of the image taken
+                            if (String.valueOf((Bitmap) data.getExtras().get("data")).equals("null")) {
+                                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+                            } else {
+                                bitmap = (Bitmap) data.getExtras().get("data");
+                            }
+                            if (Float.valueOf(getImageOrientation()) >= 0) {
+                                bitmapRotate = rotateImage(bitmap, Float.valueOf(getImageOrientation()));
+                            } else {
+                                bitmapRotate = bitmap;
+                                bitmap.recycle();
+                            }
+
+
+                                addimageview.setVisibility(View.VISIBLE);
+                                addimageview.setImageBitmap(bitmapRotate);
+
+
+//                            Saving image to mobile internal memory for sometime
+                            String root = getContext().getFilesDir().toString();
+                            File myDir = new File(root + "/androidlift");
+                            Log.e("root",">>"+root);
+                            myDir.mkdirs();
+
+                            Random generator = new Random();
+                            int n = 10000;
+                            n = generator.nextInt(n);
+
+
+                            java.util.Date date=new java.util.Date();
+                            String timeStamp=new SimpleDateFormat("yyyyMMdd_HHmmss").format(date.getTime());
+
+//                            Give the file name that u want
+                            fname = timeStamp + n + ".jpg";
+                            image=fname;
+
+                            imagepath = root + "/androidlift/" + fname;
+
+                            file = new File(myDir, fname);
+                            upflag = true;
+                        }
+                    }
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -347,7 +419,7 @@ public class New_Complaint extends Fragment implements LocationListener{
                 StringBuilder strReturnedAddress = new StringBuilder("");
 
                 for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
-                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)+"\n").append("\n");
                 }
                 strAdd = strReturnedAddress.toString();
                 locationtext.setText(strAdd);
@@ -471,6 +543,9 @@ public class New_Complaint extends Fragment implements LocationListener{
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         ivImage.setImageBitmap(null);
+        addimageview.setImageBitmap(null);
+        addimageview.setVisibility(View.INVISIBLE);
+        addimage.setVisibility(View.INVISIBLE);
     }
 
 }

@@ -2,57 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/border"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:id="@+id/relative">
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_delete_black_24dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/button1"
+            android:layout_alignParentRight="true"
+            android:text="Accept"
+            android:id="@+id/accept"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/accept"
+            android:layout_alignParentRight="true"
+            android:text="Reject"
+            android:id="@+id/reject"/>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp">
 
+
+            <TextView android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:id="@+id/tvid" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvemail" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvlocation"
-                android:layout_below="@+id/tvemail"/>
+                android:id="@+id/tvemail"
+                android:layout_below="@+id/tvid"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvcreated_at"
-                android:layout_below="@+id/tvlocation"/>
+                android:layout_below="@+id/tvproblem"/>
 
-            <TextView android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:id="@+id/tvid"
-                android:layout_below="@+id/tvcreated_at"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvproblem"
-                android:layout_below="@+id/tvid"/>
+                android:layout_below="@+id/tvemail"/>
 
-            <ImageView
-                android:id="@+id/imageView"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvcreated_at"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="-150dp"
-                android:layout_marginEnd="11dp" />
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/ic_delete_black_24dp" />
+                android:id="@+id/tvstatus"
+                android:layout_below="@+id/tvcreated_at"/>
 
 
         </RelativeLayout>

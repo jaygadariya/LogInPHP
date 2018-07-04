@@ -249,8 +249,6 @@ public class Main2Activity extends AppCompatActivity
            uris.add(Uri.fromFile(new File(getApplicationInfo().publicSourceDir)));
            sendintent.putParcelableArrayListExtra(Intent.EXTRA_STREAM,uris);
            startActivity(Intent.createChooser(sendintent,null));
-        } else if (id == R.id.nav_send) {
-
         } else if(id == R.id.logout) {
             logoutUser();
         }

@@ -7,14 +7,16 @@ public class Complaint {
     String created_at;
     String problem;
     String id;
+    String status;
 
-    public Complaint(String email, String location, String image, String created_at, String id, String problem) {
+    public Complaint(String email, String location, String image, String created_at, String id, String problem,String status) {
         this.email = email;
         this.location = location;
         this.image = image;
         this.created_at = created_at;
         this.id = id;
         this.problem = problem;
+        this.status = status;
     }
 
     public String getEmail() {
@@ -39,5 +41,9 @@ public class Complaint {
 
     public String getProblem() {
         return problem;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }

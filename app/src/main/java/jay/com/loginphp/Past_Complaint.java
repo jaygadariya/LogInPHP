@@ -95,7 +95,8 @@ public class Past_Complaint extends Fragment {
                                             complaint.getString("image"),
                                             complaint.getString("created_at"),
                                             complaint.getString("id"),
-                                            complaint.getString("problem")
+                                            complaint.getString("problem"),
+                                            complaint.getString("status")
                                     ));
                                     recyclerView.setBackground(getResources().getDrawable(R.color.white));
                                 }

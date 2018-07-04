@@ -3,6 +3,7 @@ package jay.com.loginphp;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,10 +35,6 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
 
     private Context mCtx;
     private List<Complaint> complaintList=new ArrayList<Complaint>();
-    private Bitmap bmp;
-    AppCompatActivity activity;
-
-
 
     public Complaint_filter_Adapter(Context mCtx, List<Complaint> complaintList) {
         this.mCtx = mCtx;
@@ -54,33 +52,38 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
     public void onBindViewHolder(final ComplaintViewHolder holder, final int position) {
         final Complaint complaint=complaintList.get(position);
 
-        holder.email.setText(complaint.getEmail());
-        holder.location.setText(complaint.getLocation());
-        holder.created_at.setText(complaint.getCreated_at());
-        holder.id.setText(complaint.getId());
-        holder.problem.setText(complaint.getProblem());
+        holder.email.setText("Complaint Given By:- "+complaint.getEmail());
+        holder.created_at.setText("Date of Complaint:- "+complaint.getCreated_at());
+        holder.id.setText("Complaint Number:- "+complaint.getId());
+        holder.problem.setText("Problem:- "+complaint.getProblem());
+        if (complaint.getStatus() == String.valueOf(0))
+        {
+            holder.status.setText("Status:- Pending");
+        }
+        if (complaint.getStatus() == String.valueOf(1))
+        {
+            holder.status.setText("Status:- Accepted");
+        }
+        if (complaint.getStatus()==String.valueOf(2))
+        {
+            holder.status.setText("Status:- Rejected");
+        }
+        //holder.status.setText("Status:- "+complaint.getStatus());
 
-        new AsyncTask<Void,Void,Void>(){
-
+        holder.relative.setOnClickListener(new View.OnClickListener() {
             @Override
-            protected Void doInBackground(Void... voids) {
-                try {
-                    InputStream in=new URL("https://jaywebsite.000webhostapp.com/android_login_api/uploads/"+complaint.getImage().toString() ).openStream();
-                    bmp=BitmapFactory.decodeStream(in);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
+            public void onClick(View view) {
+                Intent intent=new Intent(mCtx,Single_List_of_Complaint.class);
+                intent.putExtra("id",complaint.getId());
+                intent.putExtra("img",complaint.getImage());
+                intent.putExtra("email",complaint.getEmail());
+                intent.putExtra("location",complaint.getLocation());
+                intent.putExtra("created_at",complaint.getCreated_at());
+                intent.putExtra("problem",complaint.getProblem());
+                intent.putExtra("status",complaint.getStatus());
+                mCtx.startActivity(intent);
             }
-
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                if(bmp!=null){
-                    holder.imageView.setImageBitmap(bmp);
-                }
-                super.onPostExecute(aVoid);
-            }
-        }.execute();
+        });
 
     }
 
@@ -93,20 +96,20 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
 
 
     public class ComplaintViewHolder extends RecyclerView.ViewHolder {
-        TextView email,location,image,created_at,id,problem;
-        ImageView imageView;
+        TextView email,image,created_at,id,problem,status;
         Button delete;
+        RelativeLayout relative;
 
         public ComplaintViewHolder(View itemView) {
             super(itemView);
             email=itemView.findViewById(R.id.tvemail);
-            location=itemView.findViewById(R.id.tvlocation);
             created_at=itemView.findViewById(R.id.tvcreated_at);
-            imageView=itemView.findViewById(R.id.imageView);
             id=itemView.findViewById(R.id.tvid);
             delete=itemView.findViewById(R.id.button1);
             delete.setVisibility(View.INVISIBLE);
             problem=itemView.findViewById(R.id.tvproblem);
+            relative=itemView.findViewById(R.id.relative);
+            status=itemView.findViewById(R.id.tvstatus);
         }
     }
 }
