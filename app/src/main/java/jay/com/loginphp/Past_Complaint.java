@@ -76,6 +76,7 @@ public class Past_Complaint extends Fragment {
 
 
             private void loadComplaints() {
+                String tag_string_req = "req_getComplaint";
                 StringRequest stringRequest=new StringRequest(Request.Method.POST, AppConfig.URL_GETCOMPLAINT, new Response.Listener<String>() {
                     @SuppressLint("ResourceType")
                     @Override
@@ -126,8 +127,8 @@ public class Past_Complaint extends Fragment {
                         return params;
                     }
                 };
-
-                Volley.newRequestQueue(getActivity()).add(stringRequest);
+                AppController.getInstance().addToRequestQueue(stringRequest, tag_string_req);
+                //Volley.newRequestQueue(getActivity()).add(stringRequest);
                 pDialog=new ProgressDialog(getActivity());
                 pDialog.setMessage("Fetching Your all Complaints...");
                 pDialog.setCancelable(false);

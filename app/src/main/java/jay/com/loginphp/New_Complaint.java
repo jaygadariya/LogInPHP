@@ -458,7 +458,7 @@ public class New_Complaint extends Fragment implements LocationListener{
         protected void onPreExecute() {
 
             pDialog = new ProgressDialog(getActivity());
-            pDialog.setMessage("wait While Complenting to AMC..");
+            pDialog.setMessage("Wait While we Uploading Image...");
             pDialog.setIndeterminate(false);
             pDialog.setCancelable(false);
             pDialog.show();
@@ -486,33 +486,40 @@ public class New_Complaint extends Fragment implements LocationListener{
                 pDialog.dismiss();
             }
             if (upflag) {
-                Toast.makeText(getContext(), "Complaint Posted Successfully..", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Image Uploaded Successfully..", Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getContext(), "Unfortunately file is not Uploaded..", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Unfortunately Image is not Uploaded..", Toast.LENGTH_LONG).show();
             }
         }
     }
     //complaint function
     public void complain(final String email, final String location,final String problem) {
         String tag_string_req = "req_complaint";
+        final ProgressDialog progressDialog=new ProgressDialog(getActivity());
+        progressDialog.setMessage("Wait While we Complenting to AMC...");
+        if (!progressDialog.isShowing()) {
+            progressDialog.show();
+        }
 
         StringRequest strReq = new StringRequest(Request.Method.POST, AppConfig.URL_COMPLAINT, new Response.Listener<String>() {
 
             @Override
             public void onResponse(String response) {
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
 
                 try {
                     JSONObject jObj = new JSONObject(response);
                     boolean error = jObj.getBoolean("error");
                     if (!error) {
                         Toast.makeText(getActivity(), "Complaint Posted Successfully", Toast.LENGTH_SHORT).show();
-                        pDialog.dismiss();
                     } else {
 
                         // Error occurred in registration. Get the error
                         // message
                         String errorMsg = jObj.getString("error_msg");
-                        //Toast.makeText(getContext(),errorMsg, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),errorMsg, Toast.LENGTH_LONG).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -525,6 +532,9 @@ public class New_Complaint extends Fragment implements LocationListener{
                 //Log.e(TAG, "Registration Error: " + error.getMessage());
                 Toast.makeText(getContext(),
                         "Check Your Internet Connection", Toast.LENGTH_LONG).show();
+                if (progressDialog.isShowing()) {
+                    progressDialog.dismiss();
+                }
             }
         }) {
 

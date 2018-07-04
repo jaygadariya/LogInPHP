@@ -68,6 +68,10 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
         {
             holder.status.setText("Status:- Rejected");
         }
+        if (complaint.getStatus()==String.valueOf(3))
+        {
+            holder.status.setText("Status:- Solved");
+        }
         //holder.status.setText("Status:- "+complaint.getStatus());
 
         holder.relative.setOnClickListener(new View.OnClickListener() {

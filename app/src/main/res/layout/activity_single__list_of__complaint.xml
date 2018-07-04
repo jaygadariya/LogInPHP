@@ -39,6 +39,25 @@
             android:layout_height="wrap_content"
             android:id="@+id/tv_single_status"
             android:layout_below="@+id/tv_single_created_at"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_single_status"
+            android:text="Accept"
+            android:id="@+id/btn_single_accept"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_single_accept"
+            android:text="Reject"
+            android:id="@+id/btn_single_reject"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/btn_single_reject"
+            android:text="solved"
+            android:id="@+id/btn_single_solve"/>
+
 
     </RelativeLayout>
 

@@ -84,6 +84,10 @@ public class ComplaintAdapter extends RecyclerView.Adapter<ComplaintAdapter.Comp
         {
             holder.status.setText("Status:- Rejected");
         }
+        if (complaint.getStatus()==String.valueOf(3))
+        {
+            holder.status.setText("Status:- Solved");
+        }
         //holder.status.setText("Status:- "+complaint.getStatus());
         holder.relative.setOnClickListener(new View.OnClickListener() {
             @Override
