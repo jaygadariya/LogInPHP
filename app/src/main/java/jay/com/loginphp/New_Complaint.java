@@ -34,6 +34,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,6 +75,7 @@ public class New_Complaint extends Fragment implements LocationListener{
     Button complaint;
     private ProgressDialog pDialog;
     TextView locationtext;
+    private  EditText discrip;
 
     Button btnCamera,addimage;
     private ImageView ivImage,addimageview;
@@ -87,6 +89,14 @@ public class New_Complaint extends Fragment implements LocationListener{
     String fname;
     String image;
     File file;
+
+    String address;
+    String city;
+    String state;
+    String country;
+    String postalcode;
+    String knownname;
+
 
     LocationManager locationManager;
     String provider;
@@ -110,11 +120,13 @@ public class New_Complaint extends Fragment implements LocationListener{
             ivImage = (ImageView) view.findViewById(R.id.ivImage);
             addimage = (Button) view.findViewById(R.id.addimage);
             addimageview = (ImageView) view.findViewById(R.id.addimageview);
+            discrip=(EditText)view.findViewById(R.id.dis);
 
             SharedPreferences sharedPreferences = this.getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
             final String email = sharedPreferences.getString("email", null);
             locationtext = (TextView) view.findViewById(R.id.current_address);
             spinner = (Spinner) view.findViewById(R.id.spinner);
+
 
 
             if (ivImage.getDrawable()==null) {
@@ -127,29 +139,41 @@ public class New_Complaint extends Fragment implements LocationListener{
                 @Override
                 public void onClick(View view) {
 
+                    //Log.e("Discription",">>>>>>"+discrip.getText().toString());
+
                     String location = locationtext.getText().toString().trim();
-                    if (locationtext.getText().toString() == "") {
+                    if (locationtext.getText().toString()==null) {
                         statuscheck();
                         Toast.makeText(getActivity(), "Wait While Getting Location", Toast.LENGTH_SHORT).show();
-                    } else {
+                    }else {
                         String problem = spinner.getSelectedItem().toString();
                         if (spinner.getSelectedItemPosition() == 0) {
                             Toast.makeText(getActivity(), "Choose Right Value In spinner", Toast.LENGTH_SHORT).show();
-
                         } else {
-                            complain(email, location, problem);
+                            String dis = discrip.getText().toString().trim();
+                            if (discrip.getText().toString().length()>500 || discrip.getText().toString().length()<20){
+                                Toast.makeText(getActivity(), "Enter Discription between 20 to 500 Words", Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                if (ivImage.getDrawable() == null) {
+                                    Toast.makeText(getActivity(), "Image Is Missing", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    complain(email, location, problem, dis,city,state,country,postalcode);
+                                    if (cd.isConnectingToInternet()) {
+                                        if (!upflag) {
+                                            Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            saveFile(bitmapRotate, file);
+                                        }
+                                    } else {
+                                        Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
                             //Toast.makeText(getActivity(), ""+spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
 
                             //image upload
-                            if (cd.isConnectingToInternet()) {
-                                if (!upflag) {
-                                    Toast.makeText(getActivity(), "Image Not Captured..!", Toast.LENGTH_LONG).show();
-                                } else {
-                                    saveFile(bitmapRotate, file);
-                                }
-                            } else {
-                                Toast.makeText(getActivity(), "No Internet Connection !", Toast.LENGTH_LONG).show();
-                            }
+
                         }
                     }
 
@@ -422,6 +446,13 @@ public class New_Complaint extends Fragment implements LocationListener{
                     strReturnedAddress.append(returnedAddress.getAddressLine(i)+"\n").append("\n");
                 }
                 strAdd = strReturnedAddress.toString();
+                address=addresses.get(0).getAddressLine(0);
+                city=addresses.get(0).getLocality();
+                state=addresses.get(0).getAdminArea();
+                country=addresses.get(0).getCountryName();
+                postalcode=addresses.get(0).getPostalCode();
+                knownname=addresses.get(0).getLocality();
+
                 locationtext.setText(strAdd);
                 Log.w("My Current loction address", strReturnedAddress.toString());
             } else {
@@ -493,7 +524,7 @@ public class New_Complaint extends Fragment implements LocationListener{
         }
     }
     //complaint function
-    public void complain(final String email, final String location,final String problem) {
+    public void complain(final String email, final String location, final String problem, final String dis, final String city, final String state, final String country, final String postalcode) {
         String tag_string_req = "req_complaint";
         final ProgressDialog progressDialog=new ProgressDialog(getActivity());
         progressDialog.setMessage("Wait While we Complenting to AMC...");
@@ -531,7 +562,7 @@ public class New_Complaint extends Fragment implements LocationListener{
             public void onErrorResponse(VolleyError error) {
                 //Log.e(TAG, "Registration Error: " + error.getMessage());
                 Toast.makeText(getContext(),
-                        "Check Your Internet Connection", Toast.LENGTH_LONG).show();
+                        "Something is Missing", Toast.LENGTH_LONG).show();
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
@@ -541,11 +572,25 @@ public class New_Complaint extends Fragment implements LocationListener{
             @Override
             protected Map<String, String> getParams() {
                 // Posting params to register url
+                String discri="abcd";
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("location", location);
                 params.put("email", email);
                 params.put("fname",image);
                 params.put("problem",problem);
+                params.put("discription",dis);
+                params.put("city",city);
+                params.put("state",state);
+                params.put("country",country);
+                params.put("postalcode",postalcode);
+
+                Log.e("address",">>>>>>"+address);
+                Log.e("city",">>>>>>"+city);
+                Log.e("state",">>>>>>"+state);
+                Log.e("country",">>>>>>"+country);
+                Log.e("postalcode",">>>>>>"+postalcode);
+                Log.e("knownname",">>>>>>"+knownname);
+//                Log.e("Discription",">>>>>>>>>>>>>"+dis);
 
                 return params;
             }
@@ -554,6 +599,7 @@ public class New_Complaint extends Fragment implements LocationListener{
         AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
         ivImage.setImageBitmap(null);
         addimageview.setImageBitmap(null);
+        discrip.setText(null);
         addimageview.setVisibility(View.INVISIBLE);
         addimage.setVisibility(View.INVISIBLE);
     }

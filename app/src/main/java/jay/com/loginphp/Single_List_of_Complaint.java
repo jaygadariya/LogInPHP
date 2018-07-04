@@ -35,7 +35,7 @@ import java.util.Map;
 
 public class Single_List_of_Complaint extends AppCompatActivity {
 
-    TextView tv_single_id,tv_single_email,tv_single_problem,tv_single_location,tv_single_created_at,tv_single_status;
+    TextView tv_single_id,tv_single_email,tv_single_problem,tv_single_location,tv_single_created_at,tv_single_status,tv_single_discription;
     ImageView img_single_img;
     Button btn_single_accept,btn_single_reject,btn_single_solve;
     private Bitmap bmp;
@@ -54,16 +54,19 @@ public class Single_List_of_Complaint extends AppCompatActivity {
         tv_single_location=(TextView)findViewById(R.id.tv_single_location);
         tv_single_created_at=(TextView)findViewById(R.id.tv_single_created_at);
         tv_single_status=(TextView) findViewById(R.id.tv_single_status);
+        tv_single_discription=(TextView) findViewById(R.id.tv_single_discription);
         img_single_img=(ImageView)findViewById(R.id.img_single_img);
         btn_single_accept=(Button)findViewById(R.id.btn_single_accept);
         btn_single_reject=(Button)findViewById(R.id.btn_single_reject);
         btn_single_solve=(Button)findViewById(R.id.btn_single_solve);
+
 
         tv_single_id.setText("Complaint Number:- "+intent.getStringExtra("id")+"\n");
         tv_single_email.setText("Complaint Given By:- \n"+intent.getStringExtra("email")+"\n");
         tv_single_problem.setText("Problem:- \n"+intent.getStringExtra("problem")+"\n");
         tv_single_location.setText("Problem Located At:- \n"+intent.getStringExtra("location")+"\n");
         tv_single_created_at.setText("Date of Complaint:- "+intent.getStringExtra("created_at")+"\n");
+        tv_single_discription.setText("Discription About Complaint:- "+intent.getStringExtra("discription")+"\n");
 
         if (intent.getStringExtra("status").equals("0"))
         {

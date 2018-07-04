@@ -107,7 +107,8 @@ public class complaint_filter extends Fragment {
                                     complaint.getString("created_at"),
                                     complaint.getString("id"),
                                     complaint.getString("problem"),
-                                    complaint.getString("status")
+                                    complaint.getString("status"),
+                                    complaint.getString("discription")
                             ));
 
                             recyclerView.setBackground(getResources().getDrawable(R.color.white));

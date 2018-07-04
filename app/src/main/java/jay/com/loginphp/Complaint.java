@@ -8,8 +8,9 @@ public class Complaint {
     String problem;
     String id;
     String status;
+    String discription;
 
-    public Complaint(String email, String location, String image, String created_at, String id, String problem,String status) {
+    public Complaint(String email, String location, String image, String created_at, String id, String problem,String status,String discription) {
         this.email = email;
         this.location = location;
         this.image = image;
@@ -17,6 +18,7 @@ public class Complaint {
         this.id = id;
         this.problem = problem;
         this.status = status;
+        this.discription = discription;
     }
 
     public String getEmail() {
@@ -45,5 +47,9 @@ public class Complaint {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getDiscription() {
+        return discription;
     }
 }

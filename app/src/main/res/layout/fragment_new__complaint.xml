@@ -75,6 +75,12 @@
             android:layout_below="@+id/current_address"
             android:entries="@array/complaint_entry"
             />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:id="@+id/dis"
+            android:hint="Discription"
+            android:layout_below="@+id/spinner" />
 
     </RelativeLayout>
 </ScrollView>

@@ -85,6 +85,7 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
                 intent.putExtra("created_at",complaint.getCreated_at());
                 intent.putExtra("problem",complaint.getProblem());
                 intent.putExtra("status",complaint.getStatus());
+                intent.putExtra("discription",complaint.getDiscription());
                 mCtx.startActivity(intent);
             }
         });
