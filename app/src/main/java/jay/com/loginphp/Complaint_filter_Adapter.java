@@ -22,6 +22,9 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,7 +92,6 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
                 mCtx.startActivity(intent);
             }
         });
-
     }
 
 

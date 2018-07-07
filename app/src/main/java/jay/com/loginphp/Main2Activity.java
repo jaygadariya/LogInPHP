@@ -43,10 +43,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class Main2Activity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -57,17 +68,38 @@ public class Main2Activity extends AppCompatActivity
     private SessionManager session;
 
     SharedPreferences sharedpreferences;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
 
-
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
+        prepareAd();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                Log.i("hello", "world");
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        prepareAd();
+                    }
+                });
+            }
+        }, 30, 30, TimeUnit.SECONDS);
 
-                Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+//
+//                MobileAds.initialize(Main2Activity.this, "ca-app-pub-1624077563877773/3520573691");
+//
+//                AdView adView = (AdView) findViewById(R.id.myBannerAdView);
+//                AdRequest adRequest = new AdRequest.Builder().build();
+//                adView.loadAd(adRequest);
+
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
                 setSupportActionBar(toolbar);
 
 
@@ -112,6 +144,27 @@ public class Main2Activity extends AppCompatActivity
               requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION},666);
             }
         }
+
+    }
+
+    public void prepareAd() {
+
+        MobileAds.initialize(Main2Activity.this, "ca-app-pub-1624077563877773/7947043481");
+
+        AdView adView = (AdView) findViewById(R.id.myBannerAdView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+        Toast.makeText(this, "ad refresh", Toast.LENGTH_SHORT).show();
+
+
+
+        adView.setAdListener(new AdListener(){
+            @Override
+            public void onAdFailedToLoad(int i) {
+                Toast.makeText(Main2Activity.this, "can't load", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override

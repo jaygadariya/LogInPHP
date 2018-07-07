@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.StringTokenizer;
 
 
 /**
@@ -573,6 +574,7 @@ public class New_Complaint extends Fragment implements LocationListener{
             protected Map<String, String> getParams() {
                 // Posting params to register url
                 String discri="abcd";
+
                 Map<String, String> params = new HashMap<String, String>();
                 params.put("location", location);
                 params.put("email", email);

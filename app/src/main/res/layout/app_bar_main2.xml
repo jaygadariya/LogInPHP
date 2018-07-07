@@ -8,6 +8,8 @@
 
     tools:context="jay.com.loginphp.Main2Activity">
 
+
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,6 +26,7 @@
 
 
     <include layout="@layout/content_main2" />
+
 
 
 </android.support.design.widget.CoordinatorLayout>

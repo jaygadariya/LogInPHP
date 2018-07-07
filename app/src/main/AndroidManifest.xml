@@ -40,7 +40,8 @@
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".Single_List_of_Complaint"></activity>
+        <activity android:name=".Single_List_of_Complaint" />
+        <!-- Include the AdActivity configChanges and theme. -->
     </application>
 
 </manifest>
