@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.QuickContactBadge;
 import android.widget.Toast;
+import android.view.WindowManager;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -38,6 +39,9 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_login);
 
         inputEmail = (EditText) findViewById(R.id.email);

@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context="jay.com.loginphp.LoginActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="367dp"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="20dp"
@@ -18,15 +19,20 @@
             android:id="@+id/email"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/white"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/login"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/login"
+            android:gravity="center_vertical"
             android:hint="@string/hint_email"
             android:inputType="textEmailAddress"
             android:padding="10dp"
-            android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="16sp" />
 
-        <EditText
+        <!--<EditText
             android:id="@+id/password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -37,19 +43,44 @@
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColorHint="@color/input_login_hi
+            nt" />-->
+
         <EditText
-            android:id="@+id/retypenewpassword"
+            android:id="@+id/password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/white"
-            android:hint="Retype-new Password"
-            android:inputType="textPassword"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/password"
+            android:gravity="center_vertical"
+            android:hint="@string/hint_password"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
-            android:textColor="@color/input_login"
-            android:textColorHint="@color/input_login_hint" />
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="16sp" />
+
+
+        <EditText
+            android:id="@+id/ retypenewpassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/password"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/password"
+            android:gravity="center_vertical"
+            android:hint="retype password"
+            android:inputType="textEmailAddress"
+            android:padding="10dp"
+            android:textColor="@color/gray"
+            android:textColorHint="@color/gray"
+            android:textSize="16sp" />
 
         <!-- Login Button -->
 
@@ -62,17 +93,7 @@
             android:text="@string/btn_login"
             android:textColor="@color/white" />
 
-
         <!-- Link to Login Screen -->
-        <Button
-            android:id="@+id/forget_password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dip"
-            android:background="@null"
-            android:text="Forget Password?"
-            android:textAllCaps="false"
-            android:textSize="15dp" />
 
         <Button
             android:id="@+id/btnLinkToRegisterScreen"
@@ -82,6 +103,7 @@
             android:background="@null"
             android:text="@string/btn_link_to_register"
             android:textAllCaps="false"
+
             android:textSize="15dp" />
     </LinearLayout>
 
