@@ -38,6 +38,18 @@
             android:singleLine="true"
             android:textColor="@color/input_login"
             android:textColorHint="@color/input_login_hint" />
+        <EditText
+            android:id="@+id/retypenewpassword"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@color/white"
+            android:hint="Retype-new Password"
+            android:inputType="textPassword"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textColor="@color/input_login"
+            android:textColorHint="@color/input_login_hint" />
 
         <!-- Login Button -->
 
