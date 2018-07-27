@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.QuickContactBadge;
 import android.widget.Toast;
+import android.view.WindowManager;
 
 import com.android.volley.Request.Method;
 import com.android.volley.Response;
@@ -38,6 +39,9 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_login);
 
         inputEmail = (EditText) findViewById(R.id.email);
@@ -135,10 +139,13 @@ public class LoginActivity extends Activity {
                                 retypenewpassword.setError("Password Does not Match");
                             }
                             else {
+                                pDialog.setMessage("Wait While We sending Mail ...");
+                                showDialog();
                                 StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FORGET_PASSWORD, new Response.Listener<String>() {
 
                                     @Override
                                     public void onResponse(String response) {
+                                        hideDialog();
                                         try {
                                             JSONObject jObj = new JSONObject(response);
                                             boolean error = jObj.getBoolean("error");
@@ -148,11 +155,7 @@ public class LoginActivity extends Activity {
                                                 String errorMsg = jObj.getString("error_msg");
                                                 Toast.makeText(getApplicationContext(),
                                                         errorMsg, Toast.LENGTH_LONG).show();
-                                                inputEmail.setText(null);
-                                                inputPassword.setText(null);
-                                                retypenewpassword.setText(null);
                                             } else {
-                                                // Error in login. Get the error message
                                                 String errorMsg = jObj.getString("error_msg");
                                                 Toast.makeText(getApplicationContext(),
                                                         errorMsg, Toast.LENGTH_LONG).show();
@@ -171,6 +174,7 @@ public class LoginActivity extends Activity {
                                         Log.e(TAG, "Login Error: " + error.getMessage());
                                         Toast.makeText(getApplicationContext(),
                                                 error.getMessage(), Toast.LENGTH_LONG).show();
+                                        hideDialog();
                                     }
                                 }) {
 
