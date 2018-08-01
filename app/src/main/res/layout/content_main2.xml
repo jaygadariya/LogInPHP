@@ -16,15 +16,27 @@
         <RelativeLayout
             style="Responsive"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@drawable/background">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.62"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                app:srcCompat="@drawable/icon" />
 
             <TextView
                 android:id="@+id/tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Welcome to AMC Complaint Application Where You can complain Online" />
+                android:text="Welcome to AMC Complaint Application Where You can complain Online"
+                android:textAlignment="center"
+                android:textSize="25sp"/>
 
-            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            <com.google.android.gms.ads.AdView
+                xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/myBannerAdView"
                 style="fixed"
                 android:layout_width="wrap_content"
@@ -32,7 +44,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 ads:adSize="BANNER"
-                ads:adUnitId="ca-app-pub-1624077563877773/7947043481"></com.google.android.gms.ads.AdView>
+                ads:adUnitId="ca-app-pub-1624077563877773/9675591929">
+            </com.google.android.gms.ads.AdView>
 
         </RelativeLayout>
     </FrameLayout>

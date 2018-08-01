@@ -136,7 +136,7 @@ public class Main2Activity extends AppCompatActivity
                 editor.commit();
 
                 NavigationView navigationView1 = (NavigationView) findViewById(R.id.nav_view);
-                View hview = navigationView.getHeaderView(0);
+                 View hview = navigationView.getHeaderView(0);
                 useremail = (TextView) hview.findViewById(R.id.textforemail);
 
                 useremail.setText(user.get("email"));
@@ -149,7 +149,7 @@ public class Main2Activity extends AppCompatActivity
 
     public void prepareAd() {
 
-        MobileAds.initialize(Main2Activity.this, "ca-app-pub-1624077563877773/7947043481");
+        MobileAds.initialize(Main2Activity.this, "ca-app-pub-1624077563877773/9675591929");
 
         AdView adView = (AdView) findViewById(R.id.myBannerAdView);
         AdRequest adRequest = new AdRequest.Builder().build();
