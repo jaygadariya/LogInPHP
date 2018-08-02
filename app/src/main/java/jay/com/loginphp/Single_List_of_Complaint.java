@@ -63,30 +63,22 @@ public class Single_List_of_Complaint extends AppCompatActivity {
         tv_single_created_at.setText("Date of Complaint:- "+intent.getStringExtra("created_at")+"\n");
         tv_single_discription.setText("Discription About Complaint:- "+intent.getStringExtra("discription")+"\n");
 
-//        if (intent.getStringExtra("status").equals("0"))
-//        {
-//            tv_single_status.setText("Status:- Pending");
-//            btn_single_accept.setVisibility(View.VISIBLE);
-//            btn_single_reject.setVisibility(View.VISIBLE);
-//        }
-//        if (intent.getStringExtra("status").equals("1"))
-//        {
-//            tv_single_status.setText("Status:- Accepted");
-//            btn_single_accept.setVisibility(View.INVISIBLE);
-//            btn_single_reject.setVisibility(View.VISIBLE);
-//        }
-//        if (intent.getStringExtra("status").equals("2"))
-//        {
-//            btn_single_accept.setVisibility(View.VISIBLE);
-//            btn_single_reject.setVisibility(View.INVISIBLE);
-//            tv_single_status.setText("Status:- Rejected");
-//        }
-//        if (intent.getStringExtra("status").equals("3"))
-//        {
-//            btn_single_accept.setVisibility(View.INVISIBLE);
-//            btn_single_reject.setVisibility(View.INVISIBLE);
-//            tv_single_status.setText("Status:- Solved");
-//        }
+        if (intent.getStringExtra("status").equals("0"))
+        {
+            tv_single_status.setText("Status:- Pending");
+        }
+        if (intent.getStringExtra("status").equals("1"))
+        {
+            tv_single_status.setText("Status:- Accepted");
+        }
+        if (intent.getStringExtra("status").equals("2"))
+        {
+            tv_single_status.setText("Status:- Rejected");
+        }
+        if (intent.getStringExtra("status").equals("3"))
+        {
+            tv_single_status.setText("Status:- Solved");
+        }
         //tv_single_status.setText("Status:- "+intent.getStringExtra("status"));
 
         new AsyncTask<Void,Void,Void>(){
