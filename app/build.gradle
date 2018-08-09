@@ -25,7 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //noinspection GradleCompatible
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    //implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     //implementation 'com.mcxiaoke.volley:library-aar:1.0.0'
     //noinspection GradleCompatible
     implementation 'com.android.support:design:27.1.1'

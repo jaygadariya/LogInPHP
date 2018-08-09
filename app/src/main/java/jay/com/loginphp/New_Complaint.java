@@ -171,10 +171,6 @@ public class New_Complaint extends Fragment implements LocationListener{
                                     }
                                 }
                             }
-                            //Toast.makeText(getActivity(), ""+spinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-
-                            //image upload
-
                         }
                     }
 

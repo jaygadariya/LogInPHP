@@ -143,8 +143,8 @@ public class RegisterActivity extends Activity {
                         // User successfully stored in MySQL
                         // Now store the user in sqlite
                         String uid = jObj.getString("uid");
-
                         JSONObject user = jObj.getJSONObject("user");
+
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user

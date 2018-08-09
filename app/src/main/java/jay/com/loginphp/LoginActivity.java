@@ -142,7 +142,7 @@ public class LoginActivity extends Activity {
                     if (!error) {
                         // user successfully logged in
                         // Create login session
-                        session.setLogin(true);
+
 
                         // Now store the user in SQLite
                         String uid = jObj.getString("uid");
@@ -151,15 +151,20 @@ public class LoginActivity extends Activity {
                         String name = user.getString("name");
                         String email = user.getString("email");
                         String created_at = user.getString("created_at");
+                        String status = user.getString("user_status");
+                        if (status.equals(String.valueOf(0))){
+                            Toast.makeText(LoginActivity.this, "active your account by email id", Toast.LENGTH_SHORT).show();
+                        }else{
+                            session.setLogin(true);
+                            // Inserting row in users table
+                            db.addUser(name, email, uid, created_at);
 
-                        // Inserting row in users table
-                        db.addUser(name, email, uid, created_at);
-
-                        // Launch main activity
-                        Intent intent = new Intent(LoginActivity.this,
-                                Main2Activity.class);
-                        startActivity(intent);
-                        finish();
+                            // Launch main activity
+                            Intent intent = new Intent(LoginActivity.this,
+                                    Main2Activity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                     } else {
                         // Error in login. Get the error message
                         String errorMsg = jObj.getString("error_msg");
