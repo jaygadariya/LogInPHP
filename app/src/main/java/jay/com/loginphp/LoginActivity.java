@@ -152,9 +152,7 @@ public class LoginActivity extends Activity {
                         String email = user.getString("email");
                         String created_at = user.getString("created_at");
                         String status = user.getString("user_status");
-                        if (status.equals(String.valueOf(0))){
-                            Toast.makeText(LoginActivity.this, "active your account by email id", Toast.LENGTH_SHORT).show();
-                        }else{
+                        if (status.equals(String.valueOf(1))){
                             session.setLogin(true);
                             // Inserting row in users table
                             db.addUser(name, email, uid, created_at);
@@ -164,6 +162,9 @@ public class LoginActivity extends Activity {
                                     Main2Activity.class);
                             startActivity(intent);
                             finish();
+
+                        }else{
+                            Toast.makeText(LoginActivity.this, "active your account by email id...", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         // Error in login. Get the error message
