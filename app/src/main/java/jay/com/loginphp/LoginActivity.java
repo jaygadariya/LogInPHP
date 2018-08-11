@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.QuickContactBadge;
 import android.widget.Toast;
 
 import com.android.volley.Request.Method;
@@ -25,8 +26,7 @@ import java.util.Map;
 
 public class LoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
-    private Button btnLogin;
-    private Button btnLinkToRegister;
+    private Button btnLogin,btnLinkToRegister,forgetpassword;
     private EditText inputEmail;
     private EditText inputPassword;
     private ProgressDialog pDialog;
@@ -45,12 +45,9 @@ public class LoginActivity extends Activity {
         inputPassword = (EditText) findViewById(R.id.password);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
+        forgetpassword = (Button) findViewById(R.id.forget_password);
 
         String email=inputEmail.getText().toString();
-
-
-
-
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -102,6 +99,92 @@ public class LoginActivity extends Activity {
                 }
             }
 
+        });
+
+        forgetpassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                inputPassword.setText("");
+                inputEmail.setText("");
+                inputPassword.setHint("Enter New Password");
+                btnLogin.setText("Confirm");
+                forgetpassword.setText("Click here to Login");
+                forgetpassword.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(LoginActivity.this,LoginActivity.class));
+                        finish();
+                    }
+                });
+                btnLogin.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        final String email = inputEmail.getText().toString().trim();
+                        final String password = inputPassword.getText().toString().trim();
+                        if (!email.isEmpty() && !password.isEmpty()) {
+                            if (!inputEmail.getText().toString().trim().matches(emailPattern)) {
+                                inputEmail.setError("Enter Valid Email ID");
+                            }
+                            if (inputPassword.getText().toString().length() > 16 || inputPassword.getText().toString().length() < 8) {
+                                inputPassword.setError("Enter new Password Between 8 to 16 charecter");
+                                //Toast.makeText(RegisterActivity.this, "Enter Password Between 8 to 16 charecter", Toast.LENGTH_SHORT).show();
+                            } else {
+                                StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FORGET_PASSWORD, new Response.Listener<String>() {
+
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject jObj = new JSONObject(response);
+                                            boolean error = jObj.getBoolean("error");
+
+                                            // Check for error node in json
+                                            if (!error) {
+                                                String errorMsg = jObj.getString("error_msg");
+                                                Toast.makeText(getApplicationContext(),
+                                                        errorMsg, Toast.LENGTH_LONG).show();
+                                            } else {
+                                                // Error in login. Get the error message
+                                                String errorMsg = jObj.getString("error_msg");
+                                                Toast.makeText(getApplicationContext(),
+                                                        errorMsg, Toast.LENGTH_LONG).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            // JSON error
+                                            e.printStackTrace();
+                                            Toast.makeText(getApplicationContext(), "Json error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                }, new Response.ErrorListener() {
+
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Log.e(TAG, "Login Error: " + error.getMessage());
+                                        Toast.makeText(getApplicationContext(),
+                                                error.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                }) {
+
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        // Posting parameters to login url
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("email", email);
+                                        params.put("password", password);
+
+                                        return params;
+                                    }
+                                };
+
+                                // Adding request to request queue
+                                AppController.getInstance().addToRequestQueue(strReq);
+                            }
+                        }else{
+                            Toast.makeText(LoginActivity.this, "Please enter the credentials!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
         });
 
         // Link to Register Screen

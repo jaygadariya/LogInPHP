@@ -154,17 +154,17 @@ public class Main2Activity extends AppCompatActivity
         AdView adView = (AdView) findViewById(R.id.myBannerAdView);
         AdRequest adRequest = new AdRequest.Builder().build();
         adView.loadAd(adRequest);
-        Toast.makeText(this, "ad refresh", Toast.LENGTH_SHORT).show();
-
-
-
-        adView.setAdListener(new AdListener(){
-            @Override
-            public void onAdFailedToLoad(int i) {
-                Toast.makeText(Main2Activity.this, "can't load", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+//        Toast.makeText(this, "ad refresh", Toast.LENGTH_SHORT).show();
+//
+//
+//
+//        adView.setAdListener(new AdListener(){
+//            @Override
+//            public void onAdFailedToLoad(int i) {
+//                Toast.makeText(Main2Activity.this, "can't load", Toast.LENGTH_SHORT).show();
+//
+//            }
+//        });
     }
 
     @Override

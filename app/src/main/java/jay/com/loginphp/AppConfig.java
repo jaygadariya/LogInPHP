@@ -22,4 +22,6 @@ public class AppConfig {
 
     public static String URL_UPDATE_COMPLAINT_STATUS = "https://jaywebsite.000webhostapp.com/android_login_api/update_complaint_status.php";
 
+    public static String URL_FORGET_PASSWORD = "https://jaywebsite.000webhostapp.com/android_login_api/forget_password.php";
+
 }
