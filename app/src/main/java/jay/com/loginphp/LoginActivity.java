@@ -27,8 +27,7 @@ import java.util.Map;
 public class LoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button btnLogin,btnLinkToRegister,forgetpassword;
-    private EditText inputEmail;
-    private EditText inputPassword;
+    private EditText inputEmail,inputPassword,retypenewpassword;
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
@@ -46,6 +45,8 @@ public class LoginActivity extends Activity {
         btnLogin = (Button) findViewById(R.id.btnLogin);
         btnLinkToRegister = (Button) findViewById(R.id.btnLinkToRegisterScreen);
         forgetpassword = (Button) findViewById(R.id.forget_password);
+        retypenewpassword = (EditText)findViewById(R.id.retypenewpassword);
+        retypenewpassword.setVisibility(View.INVISIBLE);
 
         String email=inputEmail.getText().toString();
 
@@ -107,8 +108,9 @@ public class LoginActivity extends Activity {
                 inputPassword.setText("");
                 inputEmail.setText("");
                 inputPassword.setHint("Enter New Password");
-                btnLogin.setText("Confirm");
+                btnLogin.setText("Change Password?");
                 forgetpassword.setText("Click here to Login");
+                retypenewpassword.setVisibility(View.VISIBLE);
                 forgetpassword.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -128,11 +130,18 @@ public class LoginActivity extends Activity {
                             if (inputPassword.getText().toString().length() > 16 || inputPassword.getText().toString().length() < 8) {
                                 inputPassword.setError("Enter new Password Between 8 to 16 charecter");
                                 //Toast.makeText(RegisterActivity.this, "Enter Password Between 8 to 16 charecter", Toast.LENGTH_SHORT).show();
-                            } else {
+                            }
+                            if (!retypenewpassword.getText().toString().trim().equals(inputPassword.getText().toString().trim())){
+                                retypenewpassword.setError("Password Does not Match");
+                            }
+                            else {
+                                pDialog.setMessage("Wait While We sending Mail ...");
+                                showDialog();
                                 StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FORGET_PASSWORD, new Response.Listener<String>() {
 
                                     @Override
                                     public void onResponse(String response) {
+                                        hideDialog();
                                         try {
                                             JSONObject jObj = new JSONObject(response);
                                             boolean error = jObj.getBoolean("error");
@@ -143,7 +152,6 @@ public class LoginActivity extends Activity {
                                                 Toast.makeText(getApplicationContext(),
                                                         errorMsg, Toast.LENGTH_LONG).show();
                                             } else {
-                                                // Error in login. Get the error message
                                                 String errorMsg = jObj.getString("error_msg");
                                                 Toast.makeText(getApplicationContext(),
                                                         errorMsg, Toast.LENGTH_LONG).show();
@@ -162,6 +170,7 @@ public class LoginActivity extends Activity {
                                         Log.e(TAG, "Login Error: " + error.getMessage());
                                         Toast.makeText(getApplicationContext(),
                                                 error.getMessage(), Toast.LENGTH_LONG).show();
+                                        hideDialog();
                                     }
                                 }) {
 
