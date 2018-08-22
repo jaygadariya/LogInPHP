@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -62,18 +63,22 @@ public class Complaint_filter_Adapter extends RecyclerView.Adapter<Complaint_fil
         if (complaint.getStatus() == String.valueOf(0))
         {
             holder.status.setText("Status:- Pending");
+            holder.relative.setBackgroundColor(Color.WHITE);
         }
         if (complaint.getStatus() == String.valueOf(1))
         {
             holder.status.setText("Status:- Accepted");
+            holder.relative.setBackgroundColor(Color.YELLOW);
         }
         if (complaint.getStatus()==String.valueOf(2))
         {
             holder.status.setText("Status:- Rejected");
+            holder.relative.setBackgroundColor(Color.RED);
         }
         if (complaint.getStatus()==String.valueOf(3))
         {
             holder.status.setText("Status:- Solved");
+            holder.relative.setBackgroundColor(Color.GREEN);
         }
         //holder.status.setText("Status:- "+complaint.getStatus());
 

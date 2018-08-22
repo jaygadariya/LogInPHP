@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,10 +41,8 @@ public class LoginActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_login);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
@@ -139,7 +139,7 @@ public class LoginActivity extends Activity {
                                 retypenewpassword.setError("Password Does not Match");
                             }
                             else {
-                                pDialog.setMessage("Wait While We sending Mail ...");
+                                pDialog.setMessage("Wait While We sending Mail...");
                                 showDialog();
                                 StringRequest strReq = new StringRequest(Method.POST, AppConfig.URL_FORGET_PASSWORD, new Response.Listener<String>() {
 
@@ -210,7 +210,6 @@ public class LoginActivity extends Activity {
                 finish();
             }
         });
-
     }
 
     /**
@@ -310,5 +309,4 @@ public class LoginActivity extends Activity {
         if (pDialog.isShowing())
             pDialog.dismiss();
     }
-
 }

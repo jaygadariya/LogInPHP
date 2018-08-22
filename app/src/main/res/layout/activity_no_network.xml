@@ -12,5 +12,4 @@
         android:id="@+id/idnonetwork"
         android:textSize="50dp"
         android:text="Opps! Something went Wrong With Internet! Please Check Your Internet Connection..."/>
-
 </RelativeLayout>
